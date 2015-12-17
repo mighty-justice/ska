@@ -14,7 +14,8 @@ from ska.defaults import (
 from ska.exceptions import ImproperlyConfigured, InvalidData
 from ska.contrib.django.ska.utils import get_provider_data
 
-from django.contrib.auth.models import User, UNUSABLE_PASSWORD
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 
 from ska.contrib.django.ska.settings import (
@@ -113,7 +114,7 @@ class SkaAuthenticationBackend(object):
             user = User._default_manager.create_user(
                 username = auth_user,
                 email = email,
-                password = UNUSABLE_PASSWORD,
+                password = make_password(password=None),
                 first_name = first_name,
                 last_name = last_name
                 )
