@@ -4,14 +4,16 @@ __copyright__ = 'Copyright (c) 2013 Artur Barseghyan'
 __license__ = 'GPL 2.0/LGPL 2.1'
 __all__ = ('login',)
 
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
+from django.shortcuts import render
 
-from ska.contrib.django.ska.settings import REDIRECT_AFTER_LOGIN
+from ska.contrib.django.ska.settings import REDIRECT_AFTER_LOGIN, UNAUTHORISED_REQUEST_ERROR_TEMPLATE
 from ska.contrib.django.ska.utils import get_provider_data
+from ska.contrib.django.ska.http import HttpResponseUnauthorized
 
 def login(request):
     """
@@ -37,4 +39,4 @@ def login(request):
         messages.info(request, _("Login succeeded. Welcome, {0}.").format(name))
         return HttpResponseRedirect(next_url)
     else:
-        return HttpResponseForbidden(_("Authentication error!"))
+        return HttpResponseUnauthorized(render(request, UNAUTHORISED_REQUEST_ERROR_TEMPLATE))
