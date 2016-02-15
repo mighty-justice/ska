@@ -35,8 +35,8 @@ class SkaAuthenticationBackend(object):
         :param django.http.HttpRequest request:
         :return django.contrib.auth.models.User: Instance or None on failure.
         """
-        #secret_key = get_secret_key(request.REQUEST, default=SECRET_KEY)
-        provider_data = get_provider_data(request.REQUEST)
+        #secret_key = get_secret_key(request.GET, default=SECRET_KEY)
+        provider_data = get_provider_data(request.GET)
         if provider_data:
             secret_key = provider_data['SECRET_KEY']
         else:
@@ -45,7 +45,7 @@ class SkaAuthenticationBackend(object):
         #logger.debug('secret_key: {0}'.format(secret_key))
 
         #validation_result = validate_signed_request_data(
-        #    data = request.REQUEST,
+        #    data = request.GET,
         #    secret_key = SECRET_KEY,
         #    signature_param = DEFAULT_SIGNATURE_PARAM,
         #    auth_user_param = DEFAULT_AUTH_USER_PARAM,
@@ -59,7 +59,7 @@ class SkaAuthenticationBackend(object):
         try:
             # If authentication/data validation failed.
             signed_request_data = extract_signed_request_data(
-                data = request.REQUEST,
+                data = request.GET,
                 secret_key = secret_key,
                 signature_param = DEFAULT_SIGNATURE_PARAM,
                 auth_user_param = DEFAULT_AUTH_USER_PARAM,
@@ -73,9 +73,9 @@ class SkaAuthenticationBackend(object):
             return None
 
         # Get the username from request.
-        auth_user = request.REQUEST.get(DEFAULT_AUTH_USER_PARAM)
-        signature = request.REQUEST.get(DEFAULT_SIGNATURE_PARAM)
-        valid_until = request.REQUEST.get(DEFAULT_VALID_UNTIL_PARAM)
+        auth_user = request.GET.get(DEFAULT_AUTH_USER_PARAM)
+        signature = request.GET.get(DEFAULT_SIGNATURE_PARAM)
+        valid_until = request.GET.get(DEFAULT_VALID_UNTIL_PARAM)
 
         # All other specific data is taken from signed request data
         email = signed_request_data.get('email', '')

@@ -89,7 +89,7 @@ class ValidateSignedRequest(BaseValidateSignedRequest):
         def inner(request, *args, **kwargs):
             # Validating the request.
             validation_result = validate_signed_request_data(
-                data = request.REQUEST,
+                data = request.GET,
                 secret_key = self.secret_key,
                 signature_param = self.signature_param,
                 auth_user_param = self.auth_user_param,
@@ -151,7 +151,7 @@ class MethodValidateSignedRequest(BaseValidateSignedRequest):
         def inner(this, request, *args, **kwargs):
             # Validating the request.
             validation_result = validate_signed_request_data(
-                data = request.REQUEST,
+                data = request.GET,
                 secret_key = self.secret_key,
                 signature_param = self.signature_param,
                 auth_user_param = self.auth_user_param,
